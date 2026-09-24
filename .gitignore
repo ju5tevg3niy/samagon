@@ -1,6 +1,4 @@
 /samagon.sublime-workspace
-
-
-# Added by cargo
-
-/target
+/target/
+/.venv/
+/build-*/
