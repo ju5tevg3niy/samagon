@@ -3,9 +3,8 @@ name = "samagon"
 version = "0.1.0"
 edition = "2024"
 
-[lib]
-crate-type = [
-	"staticlib",
-]
-
 [dependencies]
+anyhow = "1"
+
+[build-dependencies]
+anyhow = "1"

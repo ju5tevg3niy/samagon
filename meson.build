@@ -10,18 +10,8 @@ project(
     ],
 )
 
-rust = import('rust')
-
-cargo_ws = rust.workspace()
-
-pkg = cargo_ws.package()
-
-samagon_rust_lib = pkg.library()
-
-exe = executable(
+library(
     'samagon',
-    'src/main.c',
-    link_with: samagon_rust_lib,
+    'src/lib.c',
+    'src/lib.h',
 )
-
-test('basic', exe)
