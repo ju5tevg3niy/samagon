@@ -10,8 +10,14 @@ project(
     ],
 )
 
+sdl3 = dependency('sdl3')
+
 library(
     'samagon',
     'src/lib.c',
     'src/lib.h',
+    'src/sdl3.c',
+    dependencies: [
+        sdl3,
+    ],
 )

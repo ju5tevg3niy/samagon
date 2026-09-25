@@ -2,6 +2,7 @@
 /target/
 /.venv/
 /build-*/
+.gdb_history
 
 ################################################################
 # GitHub C .gitignore template
