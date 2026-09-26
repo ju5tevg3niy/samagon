@@ -11,6 +11,7 @@ project(
 )
 
 sdl3 = dependency('sdl3')
+flecs = dependency('flecs')
 
 library(
     'samagon',

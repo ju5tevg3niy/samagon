@@ -3,6 +3,7 @@
 /.venv/
 /build-*/
 .gdb_history
+/subprojects/.wraplock
 
 ################################################################
 # GitHub C .gitignore template
