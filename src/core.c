@@ -39,3 +39,9 @@ smgn_get_should_quit(smgn_t* smgn)
 {
   return smgn->should_quit;
 }
+
+const char*
+smgn_get_sdl_error()
+{
+  return SDL_GetError();
+}

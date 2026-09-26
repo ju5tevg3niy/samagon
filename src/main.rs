@@ -1,48 +1,44 @@
-use std::ffi::c_void;
 use std::thread;
 use std::time::Duration;
 
-unsafe extern "C" {
-    fn smgn_sdl_window_create() -> *const c_void;
-    fn smgn_sdl_window_nuke(sdl_window: *const c_void);
-    fn smgn_sdl_renderer_create(sdl_window: *const c_void) -> *const c_void;
-    fn smgn_sdl_renderer_nuke(sdl_renderer: *const c_void);
-    fn smgn_sdl_renderer_render(sdl_renderer: *const c_void, r: u8, g: u8, b: u8);
-    fn smgn_init() -> *const c_void;
-    fn smgn_quit(smgn: *const c_void);
-    fn smgn_get_should_quit(smgn: *const c_void) -> bool;
-    fn smgn_events_process(smgn: *const c_void);
-}
+use anyhow::Context;
 
-fn main() {
-    let smgn_ptr = unsafe { smgn_init() };
-    let window_ptr = unsafe { smgn_sdl_window_create() };
-    let renderer_ptr = unsafe { smgn_sdl_renderer_create(window_ptr) };
+mod low;
+mod sys;
+mod utils;
 
-    let mut r: u8 = 67;
-    let mut g: u8 = 128;
-    let mut b: u8 = 200;
+fn main() -> anyhow::Result<()> {
+    let smgn = low::Smgn::init().context("Failed to init Smgn")?;
+    let window = smgn.create_window().context("Failed to create window")?;
+    let renderer = window
+        .create_renderer()
+        .context("Failed to create renderer")?;
+
+    let mut t: f32 = 0.0;
 
     loop {
-        unsafe { smgn_events_process(smgn_ptr) };
+        smgn.process_events();
 
-        let should_quit = unsafe { smgn_get_should_quit(smgn_ptr) };
+        let should_quit = smgn.should_quit();
 
         if should_quit {
             break;
         }
 
-        r = r.wrapping_add(1);
-        g = g.wrapping_add(1);
-        b = b.wrapping_add(1);
+        let r = ((t * 1.0 + 2.0).sin() + 1.0) / 2.0 * 255.0;
+        let g = ((t * 3.0 + 123.0).sin() + 1.0) / 2.0 * 255.0;
+        let b = ((t * 2.0 + 67.0).sin() + 1.0) / 2.0 * 255.0;
 
-        unsafe { smgn_sdl_renderer_render(renderer_ptr, r, g, b) };
+        renderer.render(r as u8, g as u8, b as u8);
 
         let sleep_duration = Duration::from_millis(16);
         thread::sleep(sleep_duration);
+        t += 0.016;
     }
 
-    unsafe { smgn_sdl_renderer_nuke(renderer_ptr) };
-    unsafe { smgn_sdl_window_nuke(window_ptr) };
-    unsafe { smgn_quit(smgn_ptr) };
+    std::mem::drop(smgn);
+
+    let _smgn2 = low::Smgn::init().context("Failed to init Smgn")?;
+
+    Ok(())
 }

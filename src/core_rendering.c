@@ -8,8 +8,7 @@ smgn_sdl_renderer_create(SDL_Window* window)
 
   if (!renderer) {
     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
-                 "Failed to create renderer for window(0x%p): %s",
-                 window,
+                 "Failed to create renderer for window: %s",
                  SDL_GetError());
   }
 
