@@ -13,14 +13,14 @@ where
 }
 
 fn build_meson_targets<P: AsRef<Path>>(out_dir: P) -> anyhow::Result<()> {
-    println!("Building meson targets");
+    println!("\n*** Building meson targets ***\n");
 
     let debug = read_env("DEBUG")?;
 
     let buildtype = match debug.as_str() {
         "true" => "debug",
         "false" => "release",
-        _ => anyhow::bail!("DEBUG env var contains {debug}"),
+        _ => anyhow::bail!("Environment variable DEBUG contains {debug}"),
     };
 
     let meson_build_dir = out_dir.as_ref().join("meson-build");
@@ -66,7 +66,7 @@ fn build_meson_targets<P: AsRef<Path>>(out_dir: P) -> anyhow::Result<()> {
 }
 
 fn generate_bindings<P: AsRef<Path>>(out_dir: P) -> anyhow::Result<()> {
-    println!("Generating bindings");
+    println!("\n*** Generating bindings ***\n");
 
     let bindings_path = out_dir.as_ref().join("bindings.rs");
 

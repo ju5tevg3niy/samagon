@@ -15,14 +15,14 @@ flecs = dependency('flecs')
 
 library(
     'samagon',
+    'src/engine/sdl3.c',
+    'src/engine/sdl3.h',
     'src/engine/sdl3_events.c',
     'src/engine/sdl3_events.h',
     'src/engine/sdl3_rendering.c',
     'src/engine/sdl3_rendering.h',
     'src/engine/sdl3_windowing.c',
     'src/engine/sdl3_windowing.h',
-    'src/engine/sdl3.c',
-    'src/engine/sdl3.h',
     dependencies: [
         sdl3,
     ],

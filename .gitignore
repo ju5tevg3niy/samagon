@@ -1,7 +1,6 @@
 /samagon.sublime-workspace
 /target/
 /.venv/
-/build-*/
 .gdb_history
 /subprojects/.wraplock
 
