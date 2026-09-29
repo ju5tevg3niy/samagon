@@ -1,9 +1,12 @@
-#include "core_windowing.h"
+#include "sdl3_windowing.h"
+#include "sdl3_utils.h"
 #include <SDL3/SDL.h>
 
 SDL_Window*
 smgn_sdl_window_create()
 {
+  TRACE_FUNC
+
   SDL_WindowFlags sdl_window_flags = 0;
 
   SDL_Window* window =
@@ -21,5 +24,7 @@ smgn_sdl_window_create()
 void
 smgn_sdl_window_nuke(SDL_Window* window)
 {
+  TRACE_FUNC
+
   SDL_DestroyWindow(window);
 }

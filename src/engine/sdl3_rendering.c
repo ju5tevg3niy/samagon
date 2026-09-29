@@ -1,9 +1,12 @@
-#include "core_rendering.h"
+#include "sdl3_rendering.h"
+#include "sdl3_utils.h"
 #include <SDL3/SDL.h>
 
 SDL_Renderer*
 smgn_sdl_renderer_create(SDL_Window* window)
 {
+  TRACE_FUNC
+
   SDL_Renderer* renderer = SDL_CreateRenderer(window, NULL);
 
   if (!renderer) {
@@ -18,6 +21,8 @@ smgn_sdl_renderer_create(SDL_Window* window)
 void
 smgn_sdl_renderer_nuke(SDL_Renderer* renderer)
 {
+  TRACE_FUNC
+
   SDL_DestroyRenderer(renderer);
 }
 
@@ -27,6 +32,8 @@ smgn_sdl_renderer_render(SDL_Renderer* renderer,
                          uint8_t g,
                          uint8_t b)
 {
+  TRACE_FUNC
+
   SDL_SetRenderDrawColor(renderer, r, g, b, SDL_ALPHA_OPAQUE);
   SDL_RenderClear(renderer);
   SDL_RenderPresent(renderer);

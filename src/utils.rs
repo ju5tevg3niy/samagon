@@ -1,6 +1,10 @@
 use std::ffi::CStr;
 use std::ffi::c_char;
 
+/// Get Rust String from C-string pointer
+///
+/// # Safety
+/// See CStr
 pub unsafe fn convert_cstr_to_string(cstr: *const c_char) -> String {
     unsafe { CStr::from_ptr(cstr) }
         .to_owned()

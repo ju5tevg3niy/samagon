@@ -12,7 +12,9 @@ where
     env::var(&key).with_context(|| format!("Failed to read {:?} env var", key.as_ref()))
 }
 
-fn setup_ffi_linking<P: AsRef<Path>>(out_dir: P) -> anyhow::Result<()> {
+fn build_meson_targets<P: AsRef<Path>>(out_dir: P) -> anyhow::Result<()> {
+    println!("Building meson targets");
+
     let debug = read_env("DEBUG")?;
 
     let buildtype = match debug.as_str() {
@@ -35,7 +37,7 @@ fn setup_ffi_linking<P: AsRef<Path>>(out_dir: P) -> anyhow::Result<()> {
     assert!(setup_status.success());
 
     let compile_status = Command::new("ninja")
-        .arg("--verbose")
+        // .arg("--verbose")
         .arg("-C")
         .arg(meson_build_dir.as_os_str())
         .status()
@@ -55,6 +57,35 @@ fn setup_ffi_linking<P: AsRef<Path>>(out_dir: P) -> anyhow::Result<()> {
     // Rerun this if anything inside src/ changes
     println!("cargo::rerun-if-changed=src");
 
+    println!(
+        "\nMeson targets have been built into: {}\n",
+        meson_build_dir.display()
+    );
+
+    Ok(())
+}
+
+fn generate_bindings<P: AsRef<Path>>(out_dir: P) -> anyhow::Result<()> {
+    println!("Generating bindings");
+
+    let bindings_path = out_dir.as_ref().join("bindings.rs");
+
+    bindgen::builder()
+        .header("src/lib.h")
+        .clang_arg("-std=c23")
+        .allowlist_item("smgn_.*")
+        .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
+        .default_enum_style(bindgen::EnumVariation::ModuleConsts)
+        .generate()
+        .context("Failed to generate bindings")?
+        .write_to_file(&bindings_path)
+        .context("Failed to write bindings to file")?;
+
+    println!(
+        "\nBindings have been generated into: {}\n",
+        bindings_path.display()
+    );
+
     Ok(())
 }
 
@@ -62,7 +93,9 @@ fn main() -> anyhow::Result<()> {
     let out_dir = read_env("OUT_DIR")?;
     let out_dir = PathBuf::from(out_dir);
 
-    setup_ffi_linking(out_dir).context("Failed to setup FFI linking")?;
+    build_meson_targets(&out_dir).context("Failed to setup FFI linking")?;
+
+    generate_bindings(&out_dir).context("Failed to generate C bindings with bindgen")?;
 
     Ok(())
 }

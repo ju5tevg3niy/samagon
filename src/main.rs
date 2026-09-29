@@ -1,29 +1,45 @@
 use std::thread;
 use std::time::Duration;
+use std::time::Instant;
 
 use anyhow::Context;
 
-mod low;
-mod sys;
-mod utils;
+pub mod engine;
+pub mod sys;
+pub mod utils;
 
 fn main() -> anyhow::Result<()> {
-    let smgn = low::Smgn::init().context("Failed to init Smgn")?;
-    let window = smgn.create_window().context("Failed to create window")?;
+    let sdl3 = engine::sdl3::SDL3Wrapper::init().context("Failed to init SDL3")?;
+
+    let window = sdl3.create_window().context("Failed to create window")?;
+
+    println!("The window is: {window:#?}");
+
     let renderer = window
         .create_renderer()
         .context("Failed to create renderer")?;
 
-    let mut t: f32 = 0.0;
+    println!("The renderer is: {renderer:#?}");
+
+    let mut engine = engine::core::SmgnEngine::new();
+
+    println!("The engine is: {engine:#?}");
+
+    let mut sdl3_events = sdl3.get_event_provider();
+
+    println!("The event provider is: {sdl3_events:#?}");
+
+    let start = Instant::now();
+
+    println!("Main loop start");
 
     loop {
-        smgn.process_events();
+        engine.process_events(&mut sdl3_events);
 
-        let should_quit = smgn.should_quit();
+        let elapsed = start.elapsed();
+        let t = elapsed.as_secs_f32();
 
-        if should_quit {
-            break;
-        }
+        println!("Time: {t}");
 
         let r = ((t * 1.0 + 2.0).sin() + 1.0) / 2.0 * 255.0;
         let g = ((t * 3.0 + 123.0).sin() + 1.0) / 2.0 * 255.0;
@@ -31,14 +47,15 @@ fn main() -> anyhow::Result<()> {
 
         renderer.render(r as u8, g as u8, b as u8);
 
-        let sleep_duration = Duration::from_millis(16);
+        if engine.should_quit() {
+            break;
+        }
+
+        let sleep_duration = Duration::from_millis(250);
         thread::sleep(sleep_duration);
-        t += 0.016;
     }
 
-    std::mem::drop(smgn);
-
-    let _smgn2 = low::Smgn::init().context("Failed to init Smgn")?;
+    println!("Main loop end");
 
     Ok(())
 }
