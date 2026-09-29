@@ -1,9 +1,10 @@
-use anyhow::Context;
 use std::env;
 use std::ffi::OsStr;
 use std::path::Path;
 use std::path::PathBuf;
 use std::process::Command;
+
+use anyhow::Context;
 
 fn read_env<K>(key: K) -> anyhow::Result<String>
 where
@@ -20,7 +21,7 @@ fn build_meson_targets<P: AsRef<Path>>(out_dir: P) -> anyhow::Result<()> {
     let buildtype = match debug.as_str() {
         "true" => "debug",
         "false" => "release",
-        _ => anyhow::bail!("Environment variable DEBUG contains {debug}"),
+        other => anyhow::bail!("Environment boolean variable DEBUG contains {other}"),
     };
 
     let meson_build_dir = out_dir.as_ref().join("meson-build");
@@ -37,7 +38,6 @@ fn build_meson_targets<P: AsRef<Path>>(out_dir: P) -> anyhow::Result<()> {
     assert!(setup_status.success());
 
     let compile_status = Command::new("ninja")
-        // .arg("--verbose")
         .arg("-C")
         .arg(meson_build_dir.as_os_str())
         .status()
@@ -90,7 +90,7 @@ fn generate_bindings<P: AsRef<Path>>(out_dir: P) -> anyhow::Result<()> {
 }
 
 fn main() -> anyhow::Result<()> {
-    let out_dir = read_env("OUT_DIR")?;
+    let out_dir = read_env("OUT_DIR").context("Failed to get output directory")?;
     let out_dir = PathBuf::from(out_dir);
 
     build_meson_targets(&out_dir).context("Failed to setup FFI linking")?;

@@ -1,6 +1,8 @@
 #include "sdl3_rendering.h"
 #include "sdl3_utils.h"
-#include <SDL3/SDL.h>
+#include <SDL3/SDL_log.h>
+#include <SDL3/SDL_render.h>
+#include <SDL3/SDL_video.h>
 
 SDL_Renderer*
 smgn_sdl_renderer_create(SDL_Window* window)

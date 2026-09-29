@@ -1,6 +1,7 @@
 #include "sdl3_windowing.h"
 #include "sdl3_utils.h"
-#include <SDL3/SDL.h>
+#include <SDL3/SDL_log.h>
+#include <SDL3/SDL_video.h>
 
 SDL_Window*
 smgn_sdl_window_create()

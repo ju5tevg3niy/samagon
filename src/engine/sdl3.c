@@ -1,6 +1,7 @@
 #include "sdl3.h"
 #include "sdl3_utils.h"
-#include <SDL3/SDL.h>
+#include <SDL3/SDL_init.h>
+#include <SDL3/SDL_log.h>
 
 bool
 smgn_sdl_init()

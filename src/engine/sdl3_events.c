@@ -2,6 +2,7 @@
 #include "sdl3_utils.h"
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_log.h>
+#include <SDL3/SDL_version.h>
 
 static void
 dump_sdl_event(SDL_Event* sdl_event)
