@@ -12,4 +12,6 @@ pub struct Cli {
 pub enum Commands {
     Run,
     GameLoopTest,
+    ReadProject { path: String },
+    ReadAsset { path: String },
 }
