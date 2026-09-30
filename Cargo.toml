@@ -6,6 +6,12 @@ edition = "2024"
 [dependencies]
 anyhow = "1"
 
+[dependencies.clap]
+version = "4"
+features = [
+    "derive",
+]
+
 [build-dependencies]
 anyhow = "1"
 bindgen = "0.73"

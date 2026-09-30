@@ -3,12 +3,33 @@ use std::time::Duration;
 use std::time::Instant;
 
 use anyhow::Context;
+use clap::Parser;
 
+pub mod cli;
 pub mod engine;
+pub mod project;
 pub mod sys;
 pub mod utils;
 
 fn main() -> anyhow::Result<()> {
+    let cli = cli::Cli::parse();
+
+    dbg!(&cli);
+
+    use cli::Commands;
+    match cli.command {
+        Commands::Run => {
+            println!("Run command");
+        }
+        Commands::GameLoopTest => {
+            game_loop()?;
+        }
+    }
+
+    Ok(())
+}
+
+fn game_loop() -> anyhow::Result<()> {
     let sdl3 = engine::sdl3::SDL3Wrapper::init().context("Failed to init SDL3")?;
 
     let window = sdl3.create_window().context("Failed to create window")?;
