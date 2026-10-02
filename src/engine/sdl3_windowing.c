@@ -11,7 +11,7 @@ smgn_sdl_window_create()
   SDL_WindowFlags sdl_window_flags = 0;
 
   SDL_Window* window =
-    SDL_CreateWindow("Window test", 900, 450, sdl_window_flags);
+    SDL_CreateWindow("Window test", 640, 360, sdl_window_flags);
 
   if (!window) {
     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,

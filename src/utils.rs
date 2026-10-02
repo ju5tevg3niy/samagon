@@ -27,5 +27,5 @@ where
         .with_context(|| format!("Failed to read JSON file: {:?}", file.as_ref()))?;
 
     serde_json::from_str(&file_data)
-        .with_context(|| format!("Failed to parse JSON file into {}", type_name::<T>()))
+        .with_context(|| format!("Failed to parse JSON file into {:?}", type_name::<T>()))
 }

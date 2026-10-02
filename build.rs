@@ -35,7 +35,7 @@ fn build_meson_targets<P: AsRef<Path>>(out_dir: P) -> anyhow::Result<()> {
         .status()
         .context("Failed to setup meson build directory")?;
 
-    assert!(setup_status.success());
+    anyhow::ensure!(setup_status.success(), "Meson setup failed");
 
     let compile_status = Command::new("ninja")
         .arg("-C")
@@ -43,7 +43,7 @@ fn build_meson_targets<P: AsRef<Path>>(out_dir: P) -> anyhow::Result<()> {
         .status()
         .context("Failed to compile meson build directory")?;
 
-    assert!(compile_status.success());
+    anyhow::ensure!(compile_status.success(), "Ninja compilation failed");
 
     // Add meson output dir to rustc's library search path
     println!("cargo::rustc-link-search={}", meson_build_dir.display());
