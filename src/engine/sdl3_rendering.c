@@ -29,14 +29,18 @@ smgn_sdl_renderer_nuke(SDL_Renderer* renderer)
 }
 
 void
-smgn_sdl_renderer_render(SDL_Renderer* renderer,
-                         uint8_t r,
-                         uint8_t g,
-                         uint8_t b)
+smgn_sdl_renderer_begin(SDL_Renderer* renderer, uint8_t r, uint8_t g, uint8_t b)
 {
   TRACE_FUNC
 
   SDL_SetRenderDrawColor(renderer, r, g, b, SDL_ALPHA_OPAQUE);
   SDL_RenderClear(renderer);
+}
+
+void
+smgn_sdl_renderer_end(SDL_Renderer* renderer)
+{
+  TRACE_FUNC
+
   SDL_RenderPresent(renderer);
 }

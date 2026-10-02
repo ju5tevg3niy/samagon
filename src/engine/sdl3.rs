@@ -112,8 +112,12 @@ pub struct Renderer<'sdl, 'window> {
 }
 
 impl Renderer<'_, '_> {
-    pub fn render(&self, r: u8, g: u8, b: u8) {
-        unsafe { sys::smgn_sdl_renderer_render(self.renderer_ptr.as_ptr(), r, g, b) };
+    pub fn render_begin(&self, r: u8, g: u8, b: u8) {
+        unsafe { sys::smgn_sdl_renderer_begin(self.renderer_ptr.as_ptr(), r, g, b) };
+    }
+
+    pub fn render_end(&self) {
+        unsafe { sys::smgn_sdl_renderer_end(self.renderer_ptr.as_ptr()) };
     }
 }
 
