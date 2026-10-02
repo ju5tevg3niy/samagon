@@ -12,16 +12,9 @@ smgn_sdl_init()
   sdl_init_flags |= SDL_INIT_EVENTS;
   sdl_init_flags |= SDL_INIT_VIDEO;
 
-  bool init_result = SDL_Init(sdl_init_flags);
+  CALL_N_CHECK(SDL_Init, sdl_init_flags);
 
-  if (!init_result) {
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
-                 "Failed to SDL_Init(%#x): %s",
-                 sdl_init_flags,
-                 SDL_GetError());
-  }
-
-  return init_result;
+  return true;
 }
 
 void

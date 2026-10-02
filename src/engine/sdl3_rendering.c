@@ -34,27 +34,8 @@ smgn_sdl_renderer_start(SDL_Renderer* renderer, uint8_t r, uint8_t g, uint8_t b)
 {
   TRACE_FUNC
 
-  bool ret;
-
-  ret = SDL_SetRenderDrawColor(renderer, r, g, b, SDL_ALPHA_OPAQUE);
-
-  if (!ret) {
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
-                 "Failed to set render draw color: %s",
-                 SDL_GetError());
-
-    return false;
-  }
-
-  ret = SDL_RenderClear(renderer);
-
-  if (!ret) {
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
-                 "Failed to clear renderer: %s",
-                 SDL_GetError());
-
-    return false;
-  }
+  CALL_N_CHECK(SDL_SetRenderDrawColor, renderer, r, g, b, SDL_ALPHA_OPAQUE);
+  CALL_N_CHECK(SDL_RenderClear, renderer);
 
   return true;
 }
@@ -64,15 +45,7 @@ smgn_sdl_renderer_finish(SDL_Renderer* renderer)
 {
   TRACE_FUNC
 
-  bool ret = SDL_RenderPresent(renderer);
-
-  if (!ret) {
-    SDL_LogError(SDL_LOG_CATEGORY_ERROR,
-                 "Failed to present renderer: %s",
-                 SDL_GetError());
-
-    return false;
-  }
+  CALL_N_CHECK(SDL_RenderPresent, renderer);
 
   return true;
 }

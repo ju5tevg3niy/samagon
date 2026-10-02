@@ -17,5 +17,5 @@ smgn_sdl_renderer_start(SDL_Renderer* renderer,
 bool
 smgn_sdl_renderer_finish(SDL_Renderer* renderer);
 
-void
-smgn_sdl_renderer_render_texture(SDL_Renderer* renderer);
+bool
+smgn_sdl_renderer_render_texture(SDL_Renderer* renderer, SDL_Texture* texture);
