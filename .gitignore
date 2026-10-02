@@ -3,6 +3,8 @@
 /.venv/
 .gdb_history
 /subprojects/.wraplock
+/compile_commands.json
+/.cache/
 
 ################################################################
 # GitHub C .gitignore template

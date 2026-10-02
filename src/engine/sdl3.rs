@@ -112,12 +112,20 @@ pub struct Renderer<'sdl, 'window> {
 }
 
 impl Renderer<'_, '_> {
-    pub fn render_begin(&self, r: u8, g: u8, b: u8) {
-        unsafe { sys::smgn_sdl_renderer_begin(self.renderer_ptr.as_ptr(), r, g, b) };
+    pub fn render_start(&self, r: u8, g: u8, b: u8) -> anyhow::Result<()> {
+        let res = unsafe { sys::smgn_sdl_renderer_start(self.renderer_ptr.as_ptr(), r, g, b) };
+
+        anyhow::ensure!(res, "Failed to begin SDL3 rendering");
+
+        Ok(())
     }
 
-    pub fn render_end(&self) {
-        unsafe { sys::smgn_sdl_renderer_end(self.renderer_ptr.as_ptr()) };
+    pub fn render_finish(&self) -> anyhow::Result<()> {
+        let res = unsafe { sys::smgn_sdl_renderer_finish(self.renderer_ptr.as_ptr()) };
+
+        anyhow::ensure!(res, "Failed to end SDL3 rendering");
+
+        Ok(())
     }
 }
 

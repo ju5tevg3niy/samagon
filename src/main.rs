@@ -78,9 +78,13 @@ fn game_loop() -> anyhow::Result<()> {
         let g = ((t * 3.0 + 123.0).sin() + 1.0) / 2.0 * 255.0;
         let b = ((t * 2.0 + 67.0).sin() + 1.0) / 2.0 * 255.0;
 
-        renderer.render_begin(r as u8, g as u8, b as u8);
+        renderer
+            .render_start(r as u8, g as u8, b as u8)
+            .context("Failed to start rendering")?;
 
-        renderer.render_end();
+        renderer
+            .render_finish()
+            .context("Failed to finish rendering")?;
 
         if engine.should_quit() {
             break;
