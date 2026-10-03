@@ -19,3 +19,6 @@ smgn_sdl_renderer_finish(SDL_Renderer* renderer);
 
 bool
 smgn_sdl_renderer_render_texture(SDL_Renderer* renderer, SDL_Texture* texture);
+
+void
+smgn_sdl_renderer_nuke_texture(SDL_Texture* texture);

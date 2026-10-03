@@ -49,3 +49,21 @@ smgn_sdl_renderer_finish(SDL_Renderer* renderer)
 
   return true;
 }
+
+bool
+smgn_sdl_renderer_render_texture(SDL_Renderer* renderer, SDL_Texture* texture)
+{
+  TRACE_FUNC
+
+  CALL_N_CHECK(SDL_RenderTexture, renderer, texture, nullptr, nullptr);
+
+  return true;
+}
+
+void
+smgn_sdl_renderer_nuke_texture(SDL_Texture* texture)
+{
+  TRACE_FUNC
+
+  SDL_DestroyTexture(texture);
+}

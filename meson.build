@@ -11,6 +11,7 @@ project(
 )
 
 sdl3 = dependency('sdl3')
+sdl3_image = dependency('sdl3-image')
 flecs = dependency('flecs')
 
 library(
@@ -23,7 +24,10 @@ library(
     'src/engine/sdl3_rendering.h',
     'src/engine/sdl3_windowing.c',
     'src/engine/sdl3_windowing.h',
+    'src/engine/sdl3_image.c',
+    'src/engine/sdl3_image.h',
     dependencies: [
         sdl3,
+        sdl3_image,
     ],
 )

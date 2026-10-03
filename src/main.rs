@@ -66,6 +66,10 @@ fn game_loop() -> anyhow::Result<()> {
 
     println!("Main loop start");
 
+    let test_texture = renderer
+        .load_texture("misc/test_data/test_project1/assets/test_guy.png")
+        .context("Failed to load test texture")?;
+
     loop {
         engine.process_events(&mut sdl3_events);
 
@@ -81,6 +85,10 @@ fn game_loop() -> anyhow::Result<()> {
         renderer
             .render_start(r as u8, g as u8, b as u8)
             .context("Failed to start rendering")?;
+
+        renderer
+            .render_texture(&test_texture)
+            .context("Failed to render test texture")?;
 
         renderer
             .render_finish()

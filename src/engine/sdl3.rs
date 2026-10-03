@@ -1,3 +1,4 @@
+use std::ffi::CString;
 use std::marker::PhantomData;
 use std::mem::MaybeUninit;
 use std::ptr::NonNull;
@@ -111,11 +112,11 @@ pub struct Renderer<'sdl, 'window> {
     _window: PhantomData<&'window Window<'sdl>>,
 }
 
-impl Renderer<'_, '_> {
+impl<'sdl, 'window> Renderer<'sdl, 'window> {
     pub fn render_start(&self, r: u8, g: u8, b: u8) -> anyhow::Result<()> {
         let res = unsafe { sys::smgn_sdl_renderer_start(self.renderer_ptr.as_ptr(), r, g, b) };
 
-        anyhow::ensure!(res, "Failed to begin SDL3 rendering");
+        anyhow::ensure!(res, "Failed to start SDL3 rendering");
 
         Ok(())
     }
@@ -123,9 +124,40 @@ impl Renderer<'_, '_> {
     pub fn render_finish(&self) -> anyhow::Result<()> {
         let res = unsafe { sys::smgn_sdl_renderer_finish(self.renderer_ptr.as_ptr()) };
 
-        anyhow::ensure!(res, "Failed to end SDL3 rendering");
+        anyhow::ensure!(res, "Failed to finish SDL3 rendering");
 
         Ok(())
+    }
+
+    pub fn render_texture(&self, texture: &Texture) -> anyhow::Result<()> {
+        let res = unsafe {
+            sys::smgn_sdl_renderer_render_texture(
+                self.renderer_ptr.as_ptr(),
+                texture.texture_ptr.as_ptr(),
+            )
+        };
+
+        anyhow::ensure!(res, "Failed to render SDL3 texture: {texture:#?}");
+
+        Ok(())
+    }
+
+    pub fn load_texture<'renderer>(
+        &'renderer self,
+        path: &str,
+    ) -> anyhow::Result<Texture<'sdl, 'window, 'renderer>> {
+        let c_path = CString::new(path).expect("Failed to convert texture file path to C-String");
+
+        let Some(texture_ptr) = NonNull::new(unsafe {
+            sys::smgn_sdl_load_texture(self.renderer_ptr.as_ptr(), c_path.as_ptr())
+        }) else {
+            anyhow::bail!("Failed to load SDL3 texture from file {path:?}");
+        };
+
+        Ok(Texture {
+            texture_ptr,
+            _renderer: PhantomData,
+        })
     }
 }
 
@@ -175,5 +207,17 @@ fn map_sdl_event(sdl_event: sys::SDL_Event) -> Option<SmgnEvent> {
     match event_type {
         SDL_EVENT_QUIT => Some(SmgnEvent::Quit),
         _other => None,
+    }
+}
+
+#[derive(Debug)]
+pub struct Texture<'sdl, 'window, 'renderer> {
+    texture_ptr: NonNull<sys::SDL_Texture>,
+    _renderer: PhantomData<&'renderer Renderer<'sdl, 'window>>,
+}
+
+impl Drop for Texture<'_, '_, '_> {
+    fn drop(&mut self) {
+        unsafe { sys::smgn_sdl_renderer_nuke_texture(self.texture_ptr.as_ptr()) };
     }
 }
