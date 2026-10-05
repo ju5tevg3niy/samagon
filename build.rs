@@ -6,22 +6,21 @@ use std::process::Command;
 
 use anyhow::Context;
 
-fn read_env<K>(key: K) -> anyhow::Result<String>
-where
-    K: AsRef<OsStr>,
-{
+fn read_env<K: AsRef<OsStr>>(key: K) -> anyhow::Result<String> {
     env::var(&key).with_context(|| format!("Failed to read {:?} env var", key.as_ref()))
 }
 
 fn build_meson_targets<P: AsRef<Path>>(out_dir: P) -> anyhow::Result<()> {
-    println!("\n*** Building meson targets ***\n");
+    println!();
+    println!("*** Building meson targets ***");
+    println!();
 
     let debug = read_env("DEBUG")?;
 
     let buildtype = match debug.as_str() {
         "true" => "debug",
         "false" => "release",
-        other => anyhow::bail!("Environment boolean variable DEBUG contains {other}"),
+        other => anyhow::bail!("Environment boolean variable DEBUG contains {other:?}"),
     };
 
     let meson_build_dir = out_dir.as_ref().join("meson-build");
@@ -57,16 +56,20 @@ fn build_meson_targets<P: AsRef<Path>>(out_dir: P) -> anyhow::Result<()> {
     // Rerun this if anything inside src/ changes
     println!("cargo::rerun-if-changed=src");
 
+    println!();
     println!(
-        "\nMeson targets have been built into: {}\n",
+        "Meson targets have been built into: {}",
         meson_build_dir.display()
     );
+    println!();
 
     Ok(())
 }
 
 fn generate_bindings<P: AsRef<Path>>(out_dir: P) -> anyhow::Result<()> {
-    println!("\n*** Generating bindings ***\n");
+    println!();
+    println!("*** Generating bindings ***");
+    println!();
 
     let bindings_path = out_dir.as_ref().join("bindings.rs");
 
@@ -81,10 +84,12 @@ fn generate_bindings<P: AsRef<Path>>(out_dir: P) -> anyhow::Result<()> {
         .write_to_file(&bindings_path)
         .context("Failed to write bindings to file")?;
 
+    println!();
     println!(
-        "\nBindings have been generated into: {}\n",
+        "Bindings have been generated into: {}",
         bindings_path.display()
     );
+    println!();
 
     Ok(())
 }

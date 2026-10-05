@@ -8,6 +8,8 @@ use std::sync::atomic::Ordering;
 use std::thread;
 use std::thread::ThreadId;
 
+use anyhow::Context;
+
 use crate::sys;
 
 use super::core::SmgnEvent;
@@ -146,7 +148,8 @@ impl<'sdl, 'window> Renderer<'sdl, 'window> {
         &'renderer self,
         path: &str,
     ) -> anyhow::Result<Texture<'sdl, 'window, 'renderer>> {
-        let c_path = CString::new(path).expect("Failed to convert texture file path to C-String");
+        let c_path =
+            CString::new(path).context("Failed to convert texture file path to C-String")?;
 
         let Some(texture_ptr) = NonNull::new(unsafe {
             sys::smgn_sdl_load_texture(self.renderer_ptr.as_ptr(), c_path.as_ptr())
