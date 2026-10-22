@@ -68,7 +68,7 @@ fn game_loop() -> anyhow::Result<()> {
     println!("Main loop start");
 
     let test_texture = renderer
-        .load_texture("misc/test_data/test_project1/assets/test_guy.png")
+        .load_texture("misc/test_data/test_project2026/assets/test_guy.png")
         .context("Failed to load test texture")?;
 
     loop {
