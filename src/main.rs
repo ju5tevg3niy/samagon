@@ -27,13 +27,13 @@ fn main() -> anyhow::Result<()> {
         }
         Commands::ReadProject { path } => {
             let project = project::Project::new(&path)
-                .with_context(|| format!("Failed to read project from {path:?}"))?;
+                .with_context(|| format!("Failed to load project from {path:?}"))?;
 
             println!("The project is: {project:#?}");
         }
         Commands::ReadAsset { path } => {
             let asset = project::assets::Asset::read(&path)
-                .with_context(|| format!("Failed to read asset from {path:?}"))?;
+                .with_context(|| format!("Failed to load asset from {path:?}"))?;
 
             println!("The asset is: {asset:#?}");
         }
