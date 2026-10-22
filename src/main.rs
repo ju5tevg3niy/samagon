@@ -6,6 +6,7 @@ use anyhow::Context;
 use clap::Parser;
 
 pub mod cli;
+pub mod constants;
 pub mod engine;
 pub mod project;
 pub mod sys;
