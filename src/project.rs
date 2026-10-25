@@ -17,16 +17,16 @@ type DescVersion = u32;
 
 #[derive(Debug, Deserialize)]
 pub struct ProjectDesc {
-    version: DescVersion,
+    pub version: DescVersion,
 }
 
 #[derive(Debug)]
 pub struct Project {
-    desc: ProjectDesc,
-    root_path: PathBuf,
-    project_path: PathBuf,
-    assets_path: PathBuf,
-    assets_manifest: AssetsManifest,
+    pub desc: ProjectDesc,
+    pub root_path: PathBuf,
+    pub project_path: PathBuf,
+    pub assets_path: PathBuf,
+    pub assets_manifest: AssetsManifest,
 }
 
 impl Project {
@@ -50,7 +50,7 @@ impl Project {
         let assets_manifest_path = assets_path.join(PROJECT_ASSETS_MANIFEST_FILENAME);
 
         let assets_manifest = AssetsManifest::read(assets_manifest_path)
-            .with_context(|| format!("Failed to read asset manifest"))?;
+            .context("Failed to laod project's asset manifest")?;
 
         Ok(Self {
             desc,
