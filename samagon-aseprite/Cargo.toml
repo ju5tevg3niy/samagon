@@ -1,0 +1,6 @@
+[package]
+name = "samagon-aseprite"
+version.workspace = true
+edition = "2024"
+
+[dependencies]

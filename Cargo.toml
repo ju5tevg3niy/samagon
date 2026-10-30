@@ -1,6 +1,14 @@
+[workspace]
+members = [
+    "samagon-aseprite",
+]
+
+[workspace.package]
+version = "0.1.0"
+
 [package]
 name = "samagon"
-version = "0.1.0"
+version.workspace = true
 edition = "2024"
 
 [dependencies]
