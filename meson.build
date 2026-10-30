@@ -26,8 +26,12 @@ library(
     'src/engine/sdl3_windowing.h',
     'src/engine/sdl3_image.c',
     'src/engine/sdl3_image.h',
+    'src/smgn_utils.h',
     dependencies: [
         sdl3,
         sdl3_image,
+    ],
+    include_directories: [
+        'src/',
     ],
 )

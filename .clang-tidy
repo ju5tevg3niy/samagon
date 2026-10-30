@@ -1,0 +1,13 @@
+UseColor: true
+HeaderFilterRegex: 'src/'
+Checks:
+  - bugprone-*
+  - -bugprone-easily-swappable-parameters
+  - clang-analyzer-*
+  - performance-*
+  - portability-*
+  - -portability-avoid-pragma-once
+  - misc-*
+  - -misc-non-private-member-variables-in-classes
+  - -misc-use-internal-linkage
+  - -misc-use-anonymous-namespace
