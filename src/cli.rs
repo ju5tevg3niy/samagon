@@ -14,4 +14,5 @@ pub enum Commands {
     GameLoopTest,
     ReadProject { path: String },
     ReadAsset { path: String },
+    ReadAseprite { path: String },
 }

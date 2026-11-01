@@ -15,10 +15,8 @@ pub mod utils;
 fn main() -> anyhow::Result<()> {
     let cli = cli::Cli::parse();
 
-    dbg!(&cli);
-
     use cli::Commands;
-    match cli.command {
+    match dbg!(cli).command {
         Commands::Run => {
             println!("Run command");
         }
@@ -36,6 +34,12 @@ fn main() -> anyhow::Result<()> {
                 .with_context(|| format!("Failed to load asset from {path:?}"))?;
 
             println!("The asset is: {asset:#?}");
+        }
+        Commands::ReadAseprite { path } => {
+            let aseprite_file = samagon_aseprite::read_file_raw(&path)
+                .with_context(|| format!("Failed to read aseprite file from {path:?}"))?;
+
+            println!("Aseprite file is: {aseprite_file:#?}");
         }
     }
 

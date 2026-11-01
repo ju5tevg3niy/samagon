@@ -27,6 +27,9 @@ features = [
     "derive",
 ]
 
+[dependencies.samagon-aseprite]
+path = "samagon-aseprite"
+
 [build-dependencies]
 anyhow = "1"
 bindgen = "0.73"

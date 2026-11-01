@@ -308,6 +308,7 @@ dependencies = [
  "anyhow",
  "bindgen",
  "clap",
+ "samagon-aseprite",
  "serde",
  "serde_json",
 ]
